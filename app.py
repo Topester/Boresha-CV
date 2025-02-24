@@ -70,12 +70,12 @@ col1, col2 = st.columns([1, 2])  # Adjust width ratio as needed
 
 with col1:
     # Display image in first column
-if os.path.exists(image_path):
-    header_img = Image.open(image_path)
-    st.image(header_img, use_column_width=True)
-else:
-    st.error(f"⚠️ Image not found at: {image_path}. Check the filename and path.")
-    header_img = Image.open(image_path)
+    if os.path.exists(image_path):
+        header_img = Image.open(image_path)
+        st.image(header_img, use_column_width=True)
+    else:
+        st.error(f"⚠️ Image not found at: {image_path}. Check the filename and path.")
+    #header_img = Image.open(image_path)
     new_size = (int(header_img.width * 0.8), int(header_img.height * 0.8))
     header_img_resized = header_img.resize(new_size)
     st.image(header_img_resized)
