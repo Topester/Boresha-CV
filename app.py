@@ -62,14 +62,14 @@ st.markdown('<div class="outer-container">', unsafe_allow_html=True)
 # Main content container
 st.markdown('<div class="main-container">', unsafe_allow_html=True)
 
-
+image_path = os.path.join("images", "WhatsApp Image 2025-02-24 at 04.10.26 ")
 
 # Create two columns
 col1, col2 = st.columns([1, 2])  # Adjust width ratio as needed
 
 with col1:
     # Display image in first column
-    header_img = Image.open("C:/Users/HP/PycharmProjects/Resume/WhatsApp Image 2025-02-24 at 04.10.26.jpeg")
+    header_img = Image.open(image_path)
     new_size = (int(header_img.width * 0.8), int(header_img.height * 0.8))
     header_img_resized = header_img.resize(new_size)
     st.image(header_img_resized)
