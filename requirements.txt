@@ -1,6 +1,5 @@
 streamlit
 pandas
-pickle
 nltk
 python-docx
 pypdf2
