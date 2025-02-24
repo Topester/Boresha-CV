@@ -74,11 +74,12 @@ with col1:
     if os.path.exists(image_path):
         header_img = Image.open(image_path)
         st.image(header_img, use_column_width=True)
+        #header_img = Image.open(image_path)
+        new_size = (int(header_img.width * 0.8), int(header_img.height * 0.8))
+        header_img_resized = header_img.resize(new_size)
+        st.image(header_img_resized)
     
-    #header_img = Image.open(image_path)
-    new_size = (int(header_img.width * 0.8), int(header_img.height * 0.8))
-    header_img_resized = header_img.resize(new_size)
-    st.image(header_img_resized)
+    
 
     else:
         st.error(f"⚠️ Image not found at: {image_path}. Check the filename and path.")
