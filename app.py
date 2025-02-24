@@ -79,7 +79,7 @@ with col1:
         header_img = Image.open(BytesIO(response.content))
         
         # Display original image
-        st.image(header_img, use_column_width=True)
+        #st.image(header_img, use_column_width=True)
 
         # Resize image
         new_size = (int(header_img.width * 0.8), int(header_img.height * 0.8))
