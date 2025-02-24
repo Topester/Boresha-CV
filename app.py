@@ -248,27 +248,30 @@ try:
 except FileNotFoundError:
     resume_db = pd.DataFrame(columns=["Name", "Email", "Phone", "Skills", "Category", "Job Description", "Match Score"])
 
+if "resume_db" not in st.session_state:
+    st.session_state.resume_db = pd.DataFrame(columns=["Name", "Email", "Phone", "Skills", "Category", "Job Description", "Match Score"])
+
+resume_db = st.session_state.resume_db  # Assign to local variable
+
 # Avoid duplicates by checking for existing email IDs before adding
-if 'Email' in resume_db.columns:
-    if not resume_db[resume_db['Email'] == email].empty:
+if "Email" in resume_db.columns:
+    if not resume_db[resume_db["Email"] == email].empty:
         st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
-else:
-    new_data = {
-        "Name": name,
-        "Email": email,
-        "Phone": phone,
-        "Skills": ', '.join(skills),
-        "Category": category,
-        "Job Description": job_description,
-        "Match Score": match_score
-    }
+    else:
+        new_data = {
+            "Name": name,
+            "Email": email,
+            "Phone": phone,
+            "Skills": ", ".join(skills),
+            "Category": category,
+            "Job Description": job_description,
+            "Match Score": match_score,
+        }
 
-    new_data_df = pd.DataFrame([new_data])
-    resume_db = pd.concat([resume_db, new_data_df], ignore_index=True)
-
-    # Save to CSV for future model improvements
-    resume_db.to_csv(csv_file, index=False)
-    st.success("✅ Resume data successfully saved!")
+        new_data_df = pd.DataFrame([new_data])
+        resume_db = pd.concat([resume_db, new_data_df], ignore_index=True)
+        st.session_state.resume_db = resume_db  # Update session state
+        st.success("✅ Resume added successfully!")
 
 # Preprocess the stored resume data for model improvement
 def clean_text(text):
