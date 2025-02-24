@@ -249,7 +249,8 @@ except FileNotFoundError:
     resume_db = pd.DataFrame(columns=["Name", "Email", "Phone", "Skills", "Category", "Job Description", "Match Score"])
 
 # Avoid duplicates by checking for existing email IDs before adding
-if not resume_db[resume_db['Email'] == email].empty:
+if 'Email' in resume_db.columns:
+    if not resume_db[resume_db['Email'] == email].empty:
     st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
 else:
     new_data = {
