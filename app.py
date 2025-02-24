@@ -183,7 +183,10 @@ with tab1:
 
         if text:
             name = extract_name(text) or "❌ **Not Found** - Try including your full name at the top."
-            email = extract_email(text) or "❌ **Not Found** - Ensure a valid email format (e.g., name@example.com)."
+            #email = extract_email(text) or "❌ **Not Found** - Ensure a valid email format (e.g., name@example.com)."
+            email = extract_email(text)
+                if email is None:
+                    st.warning("❌ **Not Found** - Ensure a valid email format (e.g., name@example.com).")
             phone = extract_phone(text) or "❌ **Not Found** - Include a valid phone number with country code."
             skills = extract_skills(text) or ["❌ **Not Found** - Add relevant skills to your CV."]
             category = predict_category(text)
