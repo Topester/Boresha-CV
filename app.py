@@ -254,7 +254,7 @@ if "resume_db" not in st.session_state:
 resume_db = st.session_state.resume_db  # Assign to local variable
 
 # Avoid duplicates by checking for existing email IDs before adding
-if "Email" in resume_db.columns:
+if email:
     if not resume_db[resume_db["Email"] == email].empty:
         st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
     else:
