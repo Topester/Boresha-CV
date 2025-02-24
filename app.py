@@ -3,6 +3,8 @@ import streamlit as st
 import pandas as pd
 import pickle
 import bz2
+import requests
+from io import BytesIO
 import json
 import re
 import nltk
@@ -70,19 +72,23 @@ image_path = "https://github.com/Topester/Boresha-CV/blob/main/WhatsApp%20Image%
 col1, col2 = st.columns([1, 2])  # Adjust width ratio as needed
 
 with col1:
-    # Display image in first column
-    if os.path.exists(image_path):
-        header_img = Image.open(image_path)
+    try:
+        # Load image from URL
+        response = requests.get(image_path)
+        response.raise_for_status()  # Raise error if request fails
+        header_img = Image.open(BytesIO(response.content))
+        
+        # Display original image
         st.image(header_img, use_column_width=True)
-        #header_img = Image.open(image_path)
+
+        # Resize image
         new_size = (int(header_img.width * 0.8), int(header_img.height * 0.8))
         header_img_resized = header_img.resize(new_size)
         st.image(header_img_resized)
-    
-    
 
-    else:
-        st.error(f"⚠️ Image not found at: {image_path}. Check the filename and path.")
+    except requests.exceptions.RequestException as e:
+        st.error(f"⚠️ Failed to load image: {e}")
+    
 
 with col2:
     # Display app information in the second column
