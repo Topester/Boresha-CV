@@ -1,0 +1,10 @@
+streamlit
+pandas
+pickle5  # Only needed if using pickle in Python versions below 3.8
+json
+nltk
+python-docx
+pypdf2
+pytesseract
+scikit-learn
+Pillow
