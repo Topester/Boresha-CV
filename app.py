@@ -63,7 +63,7 @@ st.markdown('<div class="outer-container">', unsafe_allow_html=True)
 # Main content container
 st.markdown('<div class="main-container">', unsafe_allow_html=True)
 
-image_path = os.path.join("images", "WhatsApp Image 2025-02-24 at 04.10.26 ")
+image_path = os.path.join("images/WhatsApp Image 2025-02-24 at 04.10.26 ")
 
 # Create two columns
 col1, col2 = st.columns([1, 2])  # Adjust width ratio as needed
