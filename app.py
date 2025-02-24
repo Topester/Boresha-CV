@@ -19,7 +19,7 @@ nltk.download('stopwords')
 nltk.download('punkt')
 
 # Load pre-trained classifier & vectorizer
-with open('model_resume_classifier.pkl', 'rb') as f:
+with bz2.BZ2File("model_resume_classifier.pkl.bz2", "rb") as f:
     model = pickle.load(f)
 
 with open('vectorizer_resume_classifier.pkl', 'rb') as f:
