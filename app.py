@@ -184,7 +184,7 @@ with tab1:
         if text:
             name = extract_name(text) or "❌ **Not Found** - Try including your full name at the top."
             #email = extract_email(text) or "❌ **Not Found** - Ensure a valid email format (e.g., name@example.com)."
-            email = extract_email(text)
+            email = extract_email(text) or ""
             if email == "None" or email == "Not Found":
                 st.warning("❌ **Not Found** - Ensure a valid email format (e.g., name@example.com).")
             phone = extract_phone(text) or "❌ **Not Found** - Include a valid phone number with country code."
