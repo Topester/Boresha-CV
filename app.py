@@ -185,7 +185,7 @@ with tab1:
             name = extract_name(text) or "❌ **Not Found** - Try including your full name at the top."
             #email = extract_email(text) or "❌ **Not Found** - Ensure a valid email format (e.g., name@example.com)."
             email = extract_email(text)
-            if email is None:
+            if email == "None" or email == "Not Found":
                 st.warning("❌ **Not Found** - Ensure a valid email format (e.g., name@example.com).")
             phone = extract_phone(text) or "❌ **Not Found** - Include a valid phone number with country code."
             skills = extract_skills(text) or ["❌ **Not Found** - Add relevant skills to your CV."]
@@ -257,7 +257,7 @@ if "resume_db" not in st.session_state:
 resume_db = st.session_state.resume_db  # Assign to local variable
 
 # Avoid duplicates by checking for existing email IDs before adding
-if email:
+if email and email != "None":
     if not resume_db[resume_db["Email"] == email].empty:
         st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
     else:
