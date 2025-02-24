@@ -7,6 +7,7 @@ import json
 import re
 import nltk
 import docx
+from PIL import Image
 from PyPDF2 import PdfReader
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
