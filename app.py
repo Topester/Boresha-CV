@@ -141,7 +141,7 @@ def extract_name(text):
 # Function to extract Email
 def extract_email(text):
     match = re.search(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', text)
-    return match.group(0) if match else "Not Found"
+    return match.group(0) if match else "None"
 
 
 # Function to extract Phone Number
