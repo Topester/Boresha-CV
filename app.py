@@ -251,7 +251,7 @@ except FileNotFoundError:
 # Avoid duplicates by checking for existing email IDs before adding
 if 'Email' in resume_db.columns:
     if not resume_db[resume_db['Email'] == email].empty:
-    st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
+        st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
 else:
     new_data = {
         "Name": name,
