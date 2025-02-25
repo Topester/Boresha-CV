@@ -7,6 +7,7 @@ import nltk
 import docx
 import bz2
 import requests
+from io import BytesIO
 from PIL import Image
 from PyPDF2 import PdfReader
 from nltk.tokenize import word_tokenize
