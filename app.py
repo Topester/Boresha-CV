@@ -257,21 +257,21 @@ if "resume_db" not in st.session_state:
 resume_db = st.session_state.resume_db  # Assign to local variable
 
 # Avoid duplicates by checking for existing email IDs before adding
-if email:
-    if not resume_db[resume_db["Email"] == email].empty:
-        st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
-    else:
-        new_data = {
-            "Name": name,
-            "Email": email,
-            "Phone": phone,
-            "Skills": ", ".join(skills),
-            "Category": category,
-            "Job Description": job_description,
-            "Match Score": match_score,
-        }
-
-        new_data_df = pd.DataFrame([new_data])
+#if email:
+#    if not resume_db[resume_db["Email"] == email].empty:
+#        st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
+#    else:
+#        new_data = {
+#            "Name": name,
+#            "Email": email,
+#            "Phone": phone,
+#            "Skills": ", ".join(skills),
+#            "Category": category,
+#            "Job Description": job_description,
+#            "Match Score": match_score,
+#        }
+#
+#        new_data_df = pd.DataFrame([new_data])
         resume_db = pd.concat([resume_db, new_data_df], ignore_index=True)
         st.session_state.resume_db = resume_db  # Update session state
         st.success("✅ Resume added successfully!")
