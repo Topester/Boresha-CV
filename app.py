@@ -17,6 +17,11 @@ import pytesseract
 from sklearn.feature_extraction.text import TfidfVectorizer
 from PIL import Image
 pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
+import threading
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
 
 # Download necessary NLTK resources
@@ -230,24 +235,43 @@ if uploaded_file:
             resume_db.to_csv(csv_file, index=False)
             st.success("✅ Category updated!")
 
-# Function to retrain model with new data
+
 def retrain_model():
+       
+    # Load dataset
     df = pd.read_csv(csv_file)
+    
+    # Text Vectorization
     vectorizer = TfidfVectorizer()
     X = vectorizer.fit_transform(df["Job Description"])
     y = df["Category"]
+    
+    # Split data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Train model
     new_model = RandomForestClassifier(n_estimators=100, random_state=42)
     new_model.fit(X_train, y_train)
+    
+    # Evaluate model
     y_pred = new_model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
-    st.write(f"New Model Accuracy: {accuracy * 100:.2f}%")
+    
+    # Save model and vectorizer
     pickle.dump(new_model, open('model_resume_classifier.pkl', 'wb'))
     pickle.dump(vectorizer, open('vectorizer_resume_classifier.pkl', 'wb'))
+    
+  
 
-if st.button("🔄 Retrain Model with New Data"):
-    st.warning("⚙ Training model... This may take a few minutes.")
-    retrain_model()
-    st.success("✅ Model retrained successfully!")
+# Run training in the background when app starts
+def start_training_in_background():
+    thread = threading.Thread(target=retrain_model, daemon=True)
+    thread.start()
+
+# Start model retraining automatically
+start_training_in_background()
+
+
+
 
 
