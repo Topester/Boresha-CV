@@ -19,11 +19,15 @@ nltk.download('stopwords')
 nltk.download('punkt')
 
 # Load pre-trained classifier & vectorizer
-with bz2.BZ2File('model_resume_classifier.pkl.bz2', 'rb') as f:
+try:
+    with bz2.BZ2File('model_resume_classifier.pkl.bz2', 'rb') as f:
     model = pickle.load(f)
 
-with open('vectorizer_resume_classifier.pkl', 'rb') as f:
+    with open('vectorizer_resume_classifier.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
+
+except FileNotFoundError:
+    st.error("⚠️ Model files not found! Ensure 'model_resume_classifier.pkl' and 'vectorizer_resume_classifier.pkl' exist.")
 
 # New CSV database to store all processed resumes
 csv_file = "processed_resumes.csv"
