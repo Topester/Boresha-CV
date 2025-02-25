@@ -53,13 +53,24 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Load header image
-header_img = Image.open("C:/Users/HP/PycharmProjects/Resume/WhatsApp Image 2025-02-24 at 04.10.26.jpeg")
 
-# Layout for image and introduction
-col1, col2 = st.columns([1, 2])
+# Outer container with Emerald Green Background
+st.markdown('<div class="outer-container">', unsafe_allow_html=True)
+
+# Main content container
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+
+image_path = "https://github.com/Topester/Boresha-CV/blob/main/WhatsApp%20Image%202025-02-24%20at%2004.10.26.jpeg?raw=true"
+
+# Create two columns
+col1, col2 = st.columns([1, 2])  # Adjust width ratio as needed
+
 with col1:
-    st.image(header_img, width=300)
+    try:
+        # Load image from URL
+        response = requests.get(image_path)
+        response.raise_for_status()  # Raise error if request fails
+        header_img = Image.open(BytesIO(response.content))
 with col2:
     st.markdown(
         """
