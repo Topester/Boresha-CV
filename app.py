@@ -87,7 +87,7 @@ with col1:
 with col2:
     st.markdown(
         """
-        ## Welcome to Resume Parser & Job Matcher 🎯
+        ## Welcome to Boresha CV Yako 🎯
         Improve your resume's effectiveness and **ATS compatibility** using our tool.
         - Parse **key resume details** (Name, Email, Phone, Skills, Experience, etc.)
         - **Check ATS compliance** and get **structuring tips**
