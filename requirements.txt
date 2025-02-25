@@ -6,3 +6,5 @@ pypdf2
 pytesseract
 scikit-learn
 Pillow
+tesseract-ocr
+opencv-python-headless 
