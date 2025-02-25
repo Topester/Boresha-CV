@@ -16,7 +16,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Download necessary NLTK resources
 nltk.download('stopwords')
-nltk.download('punkt')
+nltk.download('punkt_tab')
 
 # Load pre-trained classifier & vectorizer
 with bz2.BZ2File('model_resume_classifier.pkl.bz2', 'rb') as f:
