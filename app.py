@@ -127,7 +127,61 @@ def extract_phone(text):
     return match.group(0) if match else "Not Found - Ensure your phone number is correctly formatted."
 
 # Function to extract Skills using a predefined list
-skills_list = ["Python", "SQL", "Machine Learning", "Deep Learning", "Data Science", "Tableau", "Excel", "Java", "AWS", "TensorFlow", "Kubernetes"]
+skills_list = [
+    # Programming Languages
+    "Python", "SQL", "Java", "C++", "C#", "JavaScript", "R", "Ruby", "Swift", "Kotlin", "Go", "Dart", "Perl", "PHP", 
+    "Rust", "Scala", "TypeScript", "Shell Scripting", "Bash", "MATLAB", "Objective-C",
+
+    # Data Science & Machine Learning
+    "Machine Learning", "Deep Learning", "Artificial Intelligence", "Data Science", "Natural Language Processing",
+    "Computer Vision", "Reinforcement Learning", "Data Analytics", "Big Data", "Predictive Modeling",
+    "Statistical Analysis", "Feature Engineering", "MLOps", "Model Deployment", "PyTorch", "TensorFlow",
+    "Keras", "Scikit-Learn", "XGBoost", "LightGBM", "OpenCV", "Hugging Face", "Transformers", "AutoML",
+
+    # Database Management
+    "SQL", "PostgreSQL", "MySQL", "SQLite", "MongoDB", "Cassandra", "Redis", "DynamoDB", "BigQuery", "Snowflake",
+    "Apache Hive", "MariaDB", "GraphQL", "Oracle Database",
+
+    # Cloud & DevOps
+    "AWS", "Azure", "Google Cloud", "Kubernetes", "Docker", "Terraform", "Jenkins", "CI/CD", "CloudFormation",
+    "Lambda", "EC2", "S3", "Cloud Functions", "Firebase", "Kubernetes", "Helm", "GitOps", "Ansible", "Prometheus",
+
+    # Web Development & Frontend
+    "HTML", "CSS", "JavaScript", "React", "Angular", "Vue.js", "Node.js", "Django", "Flask", "FastAPI", "Bootstrap",
+    "Tailwind CSS", "Svelte", "Next.js", "Nuxt.js", "Redux", "GraphQL", "WebSockets",
+
+    # Backend Development
+    "REST API", "GraphQL", "Spring Boot", "ASP.NET", "Express.js", "Ruby on Rails", "Flask", "Django", "Go Fiber",
+    "NestJS", "FastAPI",
+
+    # Cybersecurity
+    "Ethical Hacking", "Penetration Testing", "Cryptography", "Cybersecurity", "Network Security", "SOC",
+    "Threat Intelligence", "Cloud Security", "SIEM", "Intrusion Detection", "Identity Management",
+
+    # Software Engineering & Tools
+    "Git", "GitHub", "Bitbucket", "Agile", "Scrum", "Kanban", "CI/CD", "JIRA", "Confluence", "Trello", "Test-Driven Development",
+    "Code Review", "Microservices", "Serverless Architecture",
+
+    # Business Intelligence & Analytics
+    "Tableau", "Power BI", "Looker", "Google Analytics", "Excel", "DAX", "SQL for Data Analysis", "A/B Testing",
+    "Marketing Analytics", "Financial Modeling", "ETL", "Data Warehousing", "Dashboarding",
+
+    # Networking & Infrastructure
+    "TCP/IP", "DNS", "VPN", "Load Balancing", "Routing", "Firewall", "Network Security", "Wireshark", "Linux Networking",
+    "Cloud Networking",
+
+    # Robotics & IoT
+    "ROS", "Arduino", "Raspberry Pi", "Edge Computing", "IoT", "Embedded Systems", "Sensors", "Actuators",
+
+    # Finance & Accounting
+    "Financial Analysis", "Budgeting", "Forecasting", "Risk Management", "Accounting", "Taxation", "Excel Modeling",
+    "Investment Analysis", "Actuarial Science",
+
+    # Soft Skills
+    "Communication", "Leadership", "Problem-Solving", "Critical Thinking", "Project Management", "Time Management",
+    "Teamwork", "Creativity", "Negotiation", "Emotional Intelligence", "Adaptability", "Decision Making"
+]
+
 
 def extract_skills(text):
     found_skills = [skill for skill in skills_list if re.search(r'\b' + re.escape(skill) + r'\b', text, re.IGNORECASE)]
