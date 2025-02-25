@@ -5,6 +5,7 @@ import json
 import re
 import nltk
 import docx
+import bz2
 from PIL import Image
 from PyPDF2 import PdfReader
 from nltk.tokenize import word_tokenize
@@ -16,7 +17,7 @@ nltk.download('stopwords')
 nltk.download('punkt')
 
 # Load pre-trained classifier & vectorizer
-with open('model_resume_classifier.pkl', 'rb') as f:
+with open('model_resume_classifier.pkl.bz2', 'rb') as f:
     model = pickle.load(f)
 
 with open('vectorizer_resume_classifier.pkl', 'rb') as f:
