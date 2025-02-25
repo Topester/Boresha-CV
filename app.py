@@ -32,10 +32,11 @@ with open('vectorizer_resume_classifier.pkl', 'rb') as f:
 
 # Database CSV
 csv_file = "processed_resumes.csv"
-try:
+if os.path.exists(csv_file):
     resume_db = pd.read_csv(csv_file)
-except FileNotFoundError:
+else:
     resume_db = pd.DataFrame(columns=["Name", "Email", "Phone", "Skills", "Category", "Job Description", "Match Score"])
+
 
 # Streamlit page configuration
 st.set_page_config(page_title="Boresha CV", page_icon=":briefcase:", layout="wide")
@@ -173,160 +174,80 @@ def calculate_match(resume_skills, job_skills):
     return matched_skills, round(match_percentage, 2)
 
 
-# 📄 Resume Parser Tab
-with tab1:
-    st.title("📄 Resume Parser & Classifier")
-    uploaded_file = st.file_uploader("Upload Resume (PDF, DOCX, PNG, JPG)", type=["pdf", "docx", "png", "jpg", "jpeg"])
+# Streamlit UI
+st.title("📄 Resume Parser & Job Matcher")
 
-    if uploaded_file is not None:
-        text = extract_text(uploaded_file)
+uploaded_file = st.file_uploader("Upload Resume (PDF, DOCX, PNG, JPG)", type=["pdf", "docx", "png", "jpg", "jpeg"])
 
-        if text:
-            name = extract_name(text) or "❌ **Not Found** - Try including your full name at the top."
-            #email = extract_email(text) or "❌ **Not Found** - Ensure a valid email format (e.g., name@example.com)."
-            email = extract_email(text) or ""
-            if email == "None" or email == "Not Found":
-                st.warning("❌ **Not Found** - Ensure a valid email format (e.g., name@example.com).")
-            phone = extract_phone(text) or "❌ **Not Found** - Include a valid phone number with country code."
-            skills = extract_skills(text) or ["❌ **Not Found** - Add relevant skills to your CV."]
-            category = predict_category(text)
+if uploaded_file:
+    text = extract_text(uploaded_file)
+    if text:
+        name = extract_name(text)
+        email = extract_email(text)
+        phone = extract_phone(text)
+        skills = extract_skills(text)
+        category = predict_category(text)
 
-            st.subheader("📌 Extracted Details")
-            st.write(f"**👤 Name:** {name}")
-            st.write(f"**📧 Email:** {email}")
-            st.write(f"**📞 Phone:** {phone}")
-            st.write(f"**🛠 Skills:** {', '.join(skills)}")
-            st.write(f"**📂 Predicted Category:** {category}")
+        st.subheader("📌 Extracted Details")
+        st.write(f"**👤 Name:** {name}")
+        st.write(f"**📧 Email:** {email}")
+        st.write(f"**📞 Phone:** {phone}")
+        st.write(f"**🛠 Skills:** {', '.join(skills)}")
+        st.write(f"**📂 Predicted Category:** {category}")
 
-            parsed_data = {"Name": name, "Email": email, "Phone": phone, "Skills": skills, "Category": category}
-            json_data = json.dumps(parsed_data, indent=4)
-            st.download_button("📥 Download JSON", data=json_data, file_name="parsed_resume.json", mime="application/json")
-
-            st.subheader("📢 Resume Structuring Advice")
-            st.markdown("""
-            - Use a **professional email** (avoid casual ones like `coolguy123@gmail.com`).  
-            - List **technical and soft skills** separately for better visibility.  
-            - Clearly define **work experience with dates** in **reverse chronological order**.  
-            - Keep it **concise** (preferably **1-2 pages** for clarity).  
-            """)
-
-with tab2:
-    st.title("📝 Job Description Matcher")
-    job_description = st.text_area("Paste Job Description Here", height=200)
-
-    if st.button("Match Resume to Job Description") and uploaded_file:
-        job_skills = extract_skills(job_description)
-        matched_skills, match_score = calculate_match(skills, job_skills)
-
-        st.subheader("🔍 Job Match Results")
-        st.write(f"**🛠 Job Skills Extracted:** {', '.join(job_skills)}")
-        st.write(f"**✅ Matched Skills:** {', '.join(matched_skills)}")
-        st.write(f"**📊 Match Score:** {match_score}%")
-
-        # Store results in a new row
-        new_data = {
-            "Name": name,
-            "Email": email,
-            "Phone": phone,
-            "Skills": ', '.join(skills),
-            "Experience": "Not Extracted Yet",
-            "Certifications": "Not Extracted Yet",
-            "Category": category,
-            "Job Description": job_description,
-            "Match Score": match_score
+        parsed_data = {
+            "Name": name, "Email": email, "Phone": phone, 
+            "Skills": ", ".join(skills), "Category": category
         }
+        st.download_button("📥 Download JSON", data=json.dumps(parsed_data, indent=4), file_name="parsed_resume.json", mime="application/json")
 
-        # Convert to DataFrame and append
-        new_data_df = pd.DataFrame([new_data])
-        resume_db = pd.concat([resume_db, new_data_df], ignore_index=True)
+        # Job Matching
+        job_description = st.text_area("Paste Job Description Here", height=150)
+        if st.button("Match Resume to Job Description"):
+            job_skills = extract_skills(job_description)
+            matched_skills, match_score = calculate_match(skills, job_skills)
 
-        # Save to CSV
-        resume_db.to_csv(csv_file, index=False)
-        st.success("✅ Resume data successfully saved!")
+            st.subheader("🔍 Job Match Results")
+            st.write(f"**🛠 Job Skills Extracted:** {', '.join(job_skills)}")
+            st.write(f"**✅ Matched Skills:** {', '.join(matched_skills)}")
+            st.write(f"**📊 Match Score:** {match_score}%")
 
-# Load existing database or create a new one
-csv_file = "processed_resumes.csv"
-try:
-    resume_db = pd.read_csv(csv_file)
-except FileNotFoundError:
-    resume_db = pd.DataFrame(columns=["Name", "Email", "Phone", "Skills", "Category", "Job Description", "Match Score"])
+            new_data = {
+                "Name": name, "Email": email, "Phone": phone, "Skills": ", ".join(skills), 
+                "Category": category, "Job Description": job_description, "Match Score": match_score
+            }
 
-if "resume_db" not in st.session_state:
-    st.session_state.resume_db = pd.DataFrame(columns=["Name", "Email", "Phone", "Skills", "Category", "Job Description", "Match Score"])
+            new_data_df = pd.DataFrame([new_data])
+            resume_db = pd.concat([resume_db, new_data_df], ignore_index=True)
+            resume_db.to_csv(csv_file, index=False)
+            st.success("✅ Resume data successfully saved!")
 
-resume_db = st.session_state.resume_db  # Assign to local variable
+        # Allow category correction
+        corrected_category = st.selectbox("Is this the correct category?", ["Yes", "No, let me change"])
+        if corrected_category == "No, let me change":
+            new_category = st.selectbox("Select Correct Category", ["Data Science", "Marketing", "Finance", "Engineering"])
+            resume_db.loc[resume_db["Email"] == email, "Category"] = new_category
+            resume_db.to_csv(csv_file, index=False)
+            st.success("✅ Category updated!")
 
-# Avoid duplicates by checking for existing email IDs before adding
-#if email:
-#    if not resume_db[resume_db["Email"] == email].empty:
-#        st.warning("⚠ Resume already exists in the database. Skipping duplicate entry.")
-#    else:
-#        new_data = {
-#            "Name": name,
-#            "Email": email,
-#            "Phone": phone,
-#            "Skills": ", ".join(skills),
-#            "Category": category,
-#            "Job Description": job_description,
-#            "Match Score": match_score,
-#        }
-#
-#        new_data_df = pd.DataFrame([new_data])
-resume_db = pd.concat([resume_db, new_data_df], ignore_index=True)
-st.session_state.resume_db = resume_db  # Update session state
-st.success("✅ Resume added successfully!")        
+# Function to retrain model with new data
+def retrain_model():
+    df = pd.read_csv(csv_file)
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(df["Job Description"])
+    y = df["Category"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    new_model = RandomForestClassifier(n_estimators=100, random_state=42)
+    new_model.fit(X_train, y_train)
+    y_pred = new_model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    st.write(f"New Model Accuracy: {accuracy * 100:.2f}%")
+    pickle.dump(new_model, open('model_resume_classifier.pkl', 'wb'))
+    pickle.dump(vectorizer, open('vectorizer_resume_classifier.pkl', 'wb'))
 
-# Preprocess the stored resume data for model improvement
-def clean_text(text):
-    text = text.lower()
-    text = re.sub(r'\W+', ' ', text)  # Remove special characters
-    text = ' '.join([word for word in text.split() if word not in stopwords.words('english')])
-    return text
+if st.button("🔄 Retrain Model with New Data"):
+    st.warning("⚙ Training model... This may take a few minutes.")
+    retrain_model()
+    st.success("✅ Model retrained successfully!")
 
-# Apply cleaning to all text fields
-resume_db['Job Description'] = resume_db['Job Description'].apply(clean_text)
-resume_db['Skills'] = resume_db['Skills'].apply(lambda x: ', '.join([skill.lower() for skill in x.split(',')]))
 
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import accuracy_score
-
-# Load updated dataset
-df = pd.read_csv("processed_resumes.csv")
-
-# Feature extraction
-vectorizer = TfidfVectorizer()
-X = vectorizer.fit_transform(df["Job Description"])  # Use job descriptions for training
-y = df["Category"]  # Labels
-
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Train new Random Forest model
-new_model = RandomForestClassifier(n_estimators=100, random_state=42)
-new_model.fit(X_train, y_train)
-
-# Evaluate model performance
-y_pred = new_model.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
-print(f"New Model Accuracy: {accuracy * 100:.2f}%")
-
-# Save new model & vectorizer
-with open('model_resume_classifier.pkl', 'wb') as f:
-    pickle.dump(new_model, f)
-
-with open('vectorizer_resume_classifier.pkl', 'wb') as f:
-    pickle.dump(vectorizer, f)
-
-#if st.button("🔄 Retrain Model with New Data"):
-#    st.warning("⚙ Training model... This may take a few minutes.")
-#    retrain_model()  # Call retraining function
-#    st.success("✅ Model retrained successfully with updated resume data!")
-
-corrected_category = st.selectbox("Is this the correct category?", ["Yes", "No, let me change"])
-if corrected_category == "No, let me change":
-    new_category = st.selectbox("Select Correct Category", ["Data Science", "Marketing", "Finance", "Engineering"])
-    df.loc[df["Email"] == email, "Category"] = new_category
-    df.to_csv(csv_file, index=False)
-    st.success("✅ Category updated! This helps improve future predictions.")
