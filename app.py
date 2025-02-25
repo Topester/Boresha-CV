@@ -16,7 +16,7 @@ from nltk.corpus import stopwords
 import pytesseract
 from sklearn.feature_extraction.text import TfidfVectorizer
 from PIL import Image
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 
 # Download necessary NLTK resources
