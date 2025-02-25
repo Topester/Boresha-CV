@@ -6,6 +6,7 @@ import re
 import nltk
 import docx
 import bz2
+import requests
 from PIL import Image
 from PyPDF2 import PdfReader
 from nltk.tokenize import word_tokenize
