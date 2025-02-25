@@ -272,9 +272,9 @@ resume_db = st.session_state.resume_db  # Assign to local variable
 #        }
 #
 #        new_data_df = pd.DataFrame([new_data])
-        resume_db = pd.concat([resume_db, new_data_df], ignore_index=True)
-        st.session_state.resume_db = resume_db  # Update session state
-        st.success("✅ Resume added successfully!")
+resume_db = pd.concat([resume_db, new_data_df], ignore_index=True)
+st.session_state.resume_db = resume_db  # Update session state
+st.success("✅ Resume added successfully!")        
 
 # Preprocess the stored resume data for model improvement
 def clean_text(text):
